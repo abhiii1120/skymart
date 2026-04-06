@@ -11,11 +11,12 @@ const AppRoutes = () => {
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/shop" element={<Shop />} />
+        <Route path="/shop" element={<Shop />}>
+        </Route>
+          <Route path="/shop/product/:id" element={<ProductDetails />} />
         <Route path="/about" element={<About />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
       </Routes>
-      <Cart/>
+      <Cart />
     </main>
   );
 };

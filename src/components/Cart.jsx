@@ -2,7 +2,7 @@ import React from "react";
 import { useContext } from "react";
 import { cartStore } from "../context/CardContext";
 import {
-    RiArrowRightLongLine,
+  RiArrowRightLongLine,
   RiCloseLine,
   RiDeleteBin5Line,
   RiInstanceLine,
@@ -10,16 +10,28 @@ import {
   RiShoppingBagLine,
 } from "react-icons/ri";
 import { FiDelete } from "react-icons/fi";
+import { BiMinus, BiPlus } from "react-icons/bi";
 
 const Cart = () => {
-  let { isCartOpen, setIsCartOpen, cartLength, cartItems, removeItemFromCart } =
-    useContext(cartStore);
-  console.log(cartLength);
+  let {
+    isCartOpen,
+    setIsCartOpen,
+    cartLength,
+    cartItems,
+    removeItemFromCart,
+    totalPrice,
+    incrementQty,
+    decrementQty,
+    totalQty,
+    clearCart
+  } = useContext(cartStore);
   return (
     <div
       className={`${isCartOpen ? "fixed inset-0 bg-black/60 backdrop-blur-sm z-40" : ""}`}
     >
-      <div className={`cart-drawer h-full w-full flex flex-col sm:w-105 ${isCartOpen ? "open" : ""}`}>
+      <div
+        className={`cart-drawer h-full w-full flex flex-col sm:w-105 ${isCartOpen ? "open" : ""}`}
+      >
         <div className="flex items-center justify-between px-6 py-5 border-b ">
           <div className="flex items-center gap-3">
             <RiShoppingBag3Line size={20} className="text-volt" />
@@ -61,6 +73,13 @@ const Cart = () => {
                     </p>
                     <p className="text-white/30 text-xs">$ {item.price} each</p>
                     <div className="flex items-center gap-2 mt-2">
+                      <button onClick={() => decrementQty(item.id)} className="w-7 h-7 flex items-center justify-center bg-white/8 hover:bg-white/15 rounded-lg transition-colors border border-white/10">
+                        <BiMinus/>
+                      </button>
+                      <span className="text-sm font-bold font-body w-5 text-center">{totalQty(item.id)}</span>
+                      <button onClick={() => incrementQty(item.id)} className="w-7 h-7 flex items-center justify-center bg-white/8 hover:bg-white/15 rounded-lg transition-colors border border-white/10">
+                        <BiPlus/>
+                      </button>
                       <button
                         onClick={() => removeItemFromCart(item.id)}
                         className="ml-auto text-red-400/60 hover:text-red-400 transition-colors"
@@ -94,15 +113,19 @@ const Cart = () => {
         {cartItems?.length > 0 ? (
           <div className="px-6 py-5 border-t border-white/8 space-y-4">
             <div className="flex justify-between items-center">
-                <span className="text-white/50 text-sm font-body">Total</span>
-                <span className="font-heading font-bold text-2xl text-white">$ hehe</span>
+              <span className="text-white/50 text-sm font-body">Total</span>
+              <span className="font-heading font-bold text-2xl text-white">
+                ${totalPrice}
+              </span>
             </div>
             <button className="w-full btn-volt flex items-center justify-center gap-2 py-3.5 text-base font-heading font-bold">
-                Checkout
-                <RiArrowRightLongLine />
+              Checkout
+              <RiArrowRightLongLine />
             </button>
-            <button className="w-full text-center text-xs text-white/25 hover:text-red-400 transition-colors py-1">Clear cart</button>
-          </div> 
+            <button onClick={()=> clearCart()} className="w-full text-center text-xs text-white/25 hover:text-red-400 transition-colors py-1">
+              Clear cart
+            </button>
+          </div>
         ) : (
           <></>
         )}

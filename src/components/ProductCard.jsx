@@ -7,11 +7,10 @@ import Star from "./utils/Star";
 const ProductCard = ({ product }) => {
   let navigate = useNavigate();
   let { addToCart, isItemInCart } = useContext(cartStore);
-
   return (
     <div className="cursor-pointer overflow-hidden border rounded-3xl border-[#ffffff1a] bg-[#111111] flex flex-col group hover:border-[#c8f40066] transition-transform duration-500">
       <div
-        onClick={() => navigate(`product/${product.id}`)}
+        onClick={() => navigate(`/shop/product/${product.id}`)}
         className="relative aspect-square bg-white overflow-hidden"
       >
         <img
@@ -35,7 +34,7 @@ const ProductCard = ({ product }) => {
           <span className="text-white/30 text-[10px]">({product.rating.count})</span>
         </div>
         <div className="flex items-center justify-between mt-auto pt-3 border-t border-white">
-          <span className="font-heading font-bold text-volt text-lg">{product.price}</span>
+          <span className="font-heading font-bold text-volt text-lg">${product.price}</span>
           <button
             onClick={() => addToCart(product)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold font-body

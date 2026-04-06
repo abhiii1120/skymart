@@ -9,10 +9,16 @@ export let CardProvider = ({ children }) => {
 
   const addToCart = (product) => {
     setcartItems((prev) =>
-      prev.some((item) => item.id === product.id) ? prev : [...prev, product],
+      prev.some((item) => item.id === product.id)
+        ? prev
+        : [...prev, { ...product, qty: 1 }],
     );
     setIsCartOpen(true);
   };
+
+  const clearCart =()=> {
+    setcartItems([]);
+  }
 
   const removeItemFromCart = (id) => {
     setcartItems((prev) => {
@@ -22,7 +28,33 @@ export let CardProvider = ({ children }) => {
 
   const isItemInCart = (id) => {
     return cartItems.some((item) => item.id === id);
-  }
+  };
+
+  const totalPrice = cartItems.reduce((acc, curr) => {
+    console.log(cartItems)
+    return acc + curr.price * (curr?.qty ?? 0)
+  }, 0).toFixed(2);
+
+  const totalQty = (id) => {
+  return cartItems.find((item) => item.id === id)?.qty ?? 0;
+};
+
+  const incrementQty = (id) => {
+    setcartItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, qty: item.qty + 1 } : item,
+      ),
+    );
+  };
+
+  const decrementQty = (id) => {
+    setcartItems((prev) =>
+      prev
+        .map((item) => (item.id === id ? { ...item, qty: item.qty - 1 } : item))
+        .filter((item) => item.qty > 0),
+    );
+  };
+
   return (
     <cartStore.Provider
       value={{
@@ -33,7 +65,12 @@ export let CardProvider = ({ children }) => {
         addToCart,
         cartLength,
         removeItemFromCart,
-        isItemInCart
+        isItemInCart,
+        totalPrice,
+        incrementQty,
+        decrementQty,
+        totalQty,
+        clearCart
       }}
     >
       {children}

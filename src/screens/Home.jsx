@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
-import { products } from "../data/Productdata";
+import { products ,subCards } from "../data/Productdata";
 import { cartStore } from "../context/CardContext";
 import Cart from "../components/Cart";
 import Button from "../components/utils/Button";
@@ -16,7 +16,7 @@ import {
   RiStarLine,
 } from "react-icons/ri";
 const Home = () => {
-  const { cartItems, cartLength } = useContext(cartStore);
+  const { cartItems, cartLength ,totalPrice} = useContext(cartStore);
   const cardItemsData = [
     {
       number: cartLength,
@@ -26,7 +26,7 @@ const Home = () => {
       class: "bg-[#c8f4001a] text-volt",
     },
     {
-      number: `$${cartLength}`,
+      number: `$${totalPrice}`,
       title: "Cart Value",
       subTitle: "Ready to checkout",
       icon: <RiFireLine />,
@@ -55,7 +55,7 @@ const Home = () => {
       count: 17,
       class: "bg-blue-500/20 text-blue-400",
       parentClass: "border-blue-500/20 bg-blue-500/10",
-      textClass: "text-blue-200",
+      textClass: "text-blue-200/55",
     },
     {
       icon: "👕",
@@ -63,7 +63,7 @@ const Home = () => {
       count: 2,
       class: "bg-pink-500/20 text-pink-400",
       parentClass: "border-pink-500/20 bg-pink-500/10",
-      textClass: "text-pink-200",
+      textClass: "text-pink-200/55",
     },
     {
       icon: "🛏️",
@@ -71,7 +71,7 @@ const Home = () => {
       count: 3,
       class: "bg-yellow-500/20 text-yellow-400",
       parentClass: "border-yellow-500/20 bg-yellow-500/10",
-      textClass: "text-yellow-200",
+      textClass: "text-yellow-200/55",
     },
     {
       icon: "🏠",
@@ -79,7 +79,7 @@ const Home = () => {
       count: 14,
       class: "bg-green-500/20 text-green-400",
       parentClass: "border-green-500/20 bg-green-500/10",
-      textClass: "text-green-200",
+      textClass: "text-green-200/55",
     },
     {
       icon: "🏀",
@@ -87,7 +87,7 @@ const Home = () => {
       count: 8,
       class: "bg-orange-500/20 text-orange-400",
       parentClass: "border-orange-500/20 bg-orange-500/10",
-      textClass: "text-orange-200",
+      textClass: "text-orange-200/55",
     },
     {
       icon: "⌚",
@@ -95,35 +95,16 @@ const Home = () => {
       count: 6,
       class: "bg-purple-500/20 text-purple-400",
       parentClass: "border-purple-500/20 bg-purple-500/10",
-      textClass: "text-purple-200",
+      textClass: "text-purple-200/55",
     },
   ];
 
-  const subCards = [
-    {
-      icon: <RiFlashlightFill size={24} />,
-      title: "Fast Delivery",
-      subTitle: "Same-day on select items",
-      class: "text-volt",
-    },
-    {
-      icon: <RiShieldLine size={24} />,
-      title: "Secure Payments",
-      subTitle: "100% encrypted checkout",
-      class: "text-blue-400",
-    },
-    {
-      icon: <RiBookmarkLine size={24} />,
-      title: "Best Prices",
-      subTitle: "Price-match guarantee",
-      class: "text-green-400",
-    },
-  ];
+
   return (
     <>
       <div className="relative overflow-hidden rounded-3xl bg-[#111] border border-white p-8 sm:p-12 mb-10">
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute inset-0 opacity-[0.03] bg-[length:40px_40px] bg-[linear-gradient(rgb(200,244,0)_1px,transparent_1px),linear-gradient(90deg,rgb(200,244,0)_1px,transparent_1px)]"></div>
+          <div className="absolute inset-0 opacity-[0.03] bg-size-[40px_40px] bg-[linear-gradient(rgb(200,244,0)_1px,transparent_1px),linear-gradient(90deg,rgb(200,244,0)_1px,transparent_1px)]"></div>
         </div>
         <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
           <div>

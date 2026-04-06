@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   RiFlashlightFill,
   RiLogoutBoxRLine,
   RiShoppingCart2Line,
 } from "react-icons/ri";
 import { NavLink } from "react-router";
+import { cartStore } from "../context/CardContext";
 
 const Navbar = () => {
   const navs = [
@@ -23,6 +24,7 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const { cartLength,setIsCartOpen } = useContext(cartStore);
   return (
     <header
       className={`sticky top-0 z-30 transition-all duration-300  ${scrolled ? "bg-[#0d0d0d]/90 backdrop-blur-xl border-b border-white" : "bg-transparent"} `}
@@ -33,14 +35,14 @@ const Navbar = () => {
             <RiFlashlightFill className="text-ink" />
           </div>
           <span className="font-heading font-bold text-lg flex">
-            Sky <span className="text-volt">Mart</span>{" "}
+            Sky <span className="text-volt">Mart</span>
           </span>
         </a>
         <nav className="hidden md:flex items-center gap-6">
-          {navs.map((item ,idx) => {
+          {navs.map((item, idx) => {
             return (
               <NavLink
-              key={idx}
+                key={idx}
                 className={({ isActive }) =>
                   isActive ? "text-[#c8f400]" : "text-[#ffffff80]"
                 }
@@ -60,10 +62,10 @@ const Navbar = () => {
               Abhinay Mhatre
             </div>
           </div>
-          <button className="relative p-2.5 bg-white/8 hover:bg-white/12 border border-white/10 rounded-xl transition-all">
+          <button onClick={() => setIsCartOpen(true)} className="relative p-2.5 bg-white/8 hover:bg-white/12 border border-white/10 rounded-xl transition-all">
             <RiShoppingCart2Line />
             <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-volt-green text-ink text-[10px] font-bold rounded-full flex items-center justify-center">
-              2
+              {cartLength}
             </span>
           </button>
           <button className="p-2.5 bg-white/8 hover:bg-red-500/20 hover:border-red-500/30 border border-white/10 rounded-xl transition-all text-white/60 hover:text-red-400">
