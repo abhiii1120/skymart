@@ -10,7 +10,7 @@ export const products = [
     category: "electronics",
     image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
     rating: {
-      rate: 4.5,
+      rate: 3,
       count: 120,
     },
     features: [
@@ -48,7 +48,7 @@ export const products = [
     category: "clothing",
     image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",
     rating: {
-      rate: 4,
+      rate: 2,
       count: 200,
     },
     features: [

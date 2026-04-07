@@ -34,7 +34,7 @@ body,
   background: #c8f400;
 }
 
-.text-ink{
+.text-ink {
   color: #0d0d0d;
 }
 
@@ -86,14 +86,29 @@ body,
 }
 
 .btn-ghost {
-      font-size: 0.875rem;
-    line-height: 1.25rem;
-    color: rgba(255, 255, 255, 0.7);
-    transition-property: all;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 0.15s;
-    border-radius: 1rem;
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.15);
-    padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgba(255, 255, 255, 0.7);
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
+  border-radius: 1rem;
+  border-width: 1px;
+  border-color: rgba(255, 255, 255, 0.15);
+  padding: 0.75rem 1.5rem;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+
+.animate-float {
+  animation: float 2s ease-in-out infinite;
 }

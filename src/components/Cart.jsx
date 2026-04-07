@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useContext } from "react";
 import { cartStore } from "../context/CardContext";
 import {
@@ -7,12 +7,15 @@ import {
   RiDeleteBin5Line,
   RiInstanceLine,
   RiShoppingBag3Line,
-  RiShoppingBagLine,
+  RiCheckboxCircleLine,
 } from "react-icons/ri";
 import { FiDelete } from "react-icons/fi";
 import { BiMinus, BiPlus } from "react-icons/bi";
 
 const Cart = () => {
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  
   let {
     isCartOpen,
     setIsCartOpen,
@@ -25,112 +28,186 @@ const Cart = () => {
     totalQty,
     clearCart
   } = useContext(cartStore);
+
+  const handleCheckout = () => {
+    setIsCheckingOut(true);
+    
+    // Simulate checkout process
+    setTimeout(() => {
+      clearCart();
+      setIsCheckingOut(false);
+      setShowSuccess(true);
+      
+      // Close success message after 3 seconds
+      setTimeout(() => {
+        setShowSuccess(false);
+        setIsCartOpen(false);
+      }, 3000);
+    }, 1500);
+  };
+
   return (
-    <div
-      className={`${isCartOpen ? "fixed inset-0 bg-black/60 backdrop-blur-sm z-40" : ""}`}
-    >
-      <div
-        className={`cart-drawer h-full w-full flex flex-col sm:w-105 ${isCartOpen ? "open" : ""}`}
-      >
-        <div className="flex items-center justify-between px-6 py-5 border-b ">
-          <div className="flex items-center gap-3">
-            <RiShoppingBag3Line size={20} className="text-volt" />
-            <div className="font-heading font-bold text-lg text-white">
-              Cart
+    <>
+      {/* Success Toast Notification */}
+      {showSuccess && (
+        <div className="fixed top-20 right-4 z-50 animate-slide-in-right">
+          <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-2xl shadow-2xl p-4 flex items-center gap-3 border border-white/20">
+            <div className="animate-bounce">
+              <RiCheckboxCircleLine size={24} />
             </div>
-            <span className="badge bg-volt text-volt text-xs">
-              {cartLength} items
-            </span>
+            <div>
+              <p className="font-bold">Checkout Successful!</p>
+              <p className="text-sm text-white/90">Thank you for your purchase</p>
+            </div>
           </div>
-          <button
-            className="p-2 hover:bg-white/8 rounded-xl transition-colors text-white/50 hover:text-white"
-            onClick={() => setIsCartOpen(false)}
-          >
-            <RiCloseLine />
-          </button>
         </div>
-        <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3">
-          {cartItems?.length > 0 ? (
-            cartItems.map((item) => {
-              return (
-                <div
-                  className="flex gap-4 p-3 bg-white/4 border  rounded-2xl animate-fade-in"
-                  key={item.id}
-                >
-                  <div className="w-18 h-18 bg-white rounded-xl overflow-hidden shrink-0 flex items-center justify-center p-2">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-white/80 font-body clamp-2 leading-snug">
-                      {item.name}
-                    </p>
-                    <p className="text-volt font-heading font-bold text-base mt-1">
-                      $ {item.price}
-                    </p>
-                    <p className="text-white/30 text-xs">$ {item.price} each</p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <button onClick={() => decrementQty(item.id)} className="w-7 h-7 flex items-center justify-center bg-white/8 hover:bg-white/15 rounded-lg transition-colors border border-white/10">
-                        <BiMinus/>
-                      </button>
-                      <span className="text-sm font-bold font-body w-5 text-center">{totalQty(item.id)}</span>
-                      <button onClick={() => incrementQty(item.id)} className="w-7 h-7 flex items-center justify-center bg-white/8 hover:bg-white/15 rounded-lg transition-colors border border-white/10">
-                        <BiPlus/>
-                      </button>
-                      <button
-                        onClick={() => removeItemFromCart(item.id)}
-                        className="ml-auto text-red-400/60 hover:text-red-400 transition-colors"
-                      >
-                        <RiDeleteBin5Line />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3">
-              <div className="h-full flex flex-col items-center justify-center gap-4 text-center py-16">
-                <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-3xl flex items-center justify-center">
-                  <RiInstanceLine size={36} className="text-volt" />
-                </div>
-                <div>
-                  <p className="font-heading font-semibold text-white/70 text-lg">
-                    Cart is empty
-                  </p>
-                  <p className="text-white/30 text-sm mt-1">
-                    Go shop something cool!
-                  </p>
-                </div>
-                <button className="btn-volt mt-2">Browse Products</button>
+      )}
+
+      {/* Cart Drawer Overlay */}
+      <div
+        className={`${isCartOpen ? "fixed inset-0 bg-black/60 backdrop-blur-sm z-40" : ""}`}
+        onClick={() => setIsCartOpen(false)}
+      >
+        <div
+          className={`cart-drawer h-full w-full flex flex-col sm:w-105 ${isCartOpen ? "open" : ""}`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between px-6 py-5 border-b">
+            <div className="flex items-center gap-3">
+              <RiShoppingBag3Line size={20} className="text-volt" />
+              <div className="font-heading font-bold text-lg text-white">
+                Cart
               </div>
-            </div>
-          )}
-        </div>
-        {cartItems?.length > 0 ? (
-          <div className="px-6 py-5 border-t border-white/8 space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="text-white/50 text-sm font-body">Total</span>
-              <span className="font-heading font-bold text-2xl text-white">
-                ${totalPrice}
+              <span className="badge bg-volt text-volt text-xs">
+                {cartLength} items
               </span>
             </div>
-            <button className="w-full btn-volt flex items-center justify-center gap-2 py-3.5 text-base font-heading font-bold">
-              Checkout
-              <RiArrowRightLongLine />
-            </button>
-            <button onClick={()=> clearCart()} className="w-full text-center text-xs text-white/25 hover:text-red-400 transition-colors py-1">
-              Clear cart
+            <button
+              className="p-2 hover:bg-white/8 rounded-xl transition-colors text-white/50 hover:text-white"
+              onClick={() => setIsCartOpen(false)}
+            >
+              <RiCloseLine />
             </button>
           </div>
-        ) : (
-          <></>
-        )}
+          
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3">
+            {cartItems?.length > 0 ? (
+              cartItems.map((item) => {
+                return (
+                  <div
+                    className="flex gap-4 p-3 bg-white/4 border rounded-2xl animate-fade-in"
+                    key={item.id}
+                  >
+                    <div className="w-18 h-18 bg-white rounded-xl overflow-hidden shrink-0 flex items-center justify-center p-2">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-white/80 font-body clamp-2 leading-snug">
+                        {item.name}
+                      </p>
+                      <p className="text-volt font-heading font-bold text-base mt-1">
+                        $ {item.price}
+                      </p>
+                      <p className="text-white/30 text-xs">$ {item.price} each</p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <button onClick={() => decrementQty(item.id)} className="w-7 h-7 flex items-center justify-center bg-white/8 hover:bg-white/15 rounded-lg transition-colors border border-white/10">
+                          <BiMinus/>
+                        </button>
+                        <span className="text-sm font-bold font-body w-5 text-center">{totalQty(item.id)}</span>
+                        <button onClick={() => incrementQty(item.id)} className="w-7 h-7 flex items-center justify-center bg-white/8 hover:bg-white/15 rounded-lg transition-colors border border-white/10">
+                          <BiPlus/>
+                        </button>
+                        <button
+                          onClick={() => removeItemFromCart(item.id)}
+                          className="ml-auto text-red-400/60 hover:text-red-400 transition-colors"
+                        >
+                          <RiDeleteBin5Line />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3">
+                <div className="h-full flex flex-col items-center justify-center gap-4 text-center py-16">
+                  <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-3xl flex items-center justify-center">
+                    <RiInstanceLine size={36} className="text-volt" />
+                  </div>
+                  <div>
+                    <p className="font-heading font-semibold text-white/70 text-lg">
+                      Cart is empty
+                    </p>
+                    <p className="text-white/30 text-sm mt-1">
+                      Go shop something cool!
+                    </p>
+                  </div>
+                  <button onClick={() => setIsCartOpen(false)} className="btn-volt mt-2">Browse Products</button>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          {cartItems?.length > 0 ? (
+            <div className="px-6 py-5 border-t border-white/8 space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-white/50 text-sm font-body">Total</span>
+                <span className="font-heading font-bold text-2xl text-white">
+                  ${totalPrice}
+                </span>
+              </div>
+              <button 
+                className={`w-full btn-volt flex items-center justify-center gap-2 py-3.5 text-base font-heading font-bold transition-all duration-300 ${isCheckingOut ? 'opacity-70 cursor-not-allowed' : 'hover:scale-105'}`}
+                onClick={handleCheckout}
+                disabled={isCheckingOut}
+              >
+                {isCheckingOut ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    Checkout
+                    <RiArrowRightLongLine />
+                  </>
+                )}
+              </button>
+              <button 
+                onClick={() => clearCart()} 
+                className="w-full text-center text-xs text-white/25 hover:text-red-400 transition-colors py-1"
+              >
+                Clear cart
+              </button>
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
-    </div>
+
+      {/* Add these styles to your global CSS or tailwind.config.js */}
+      <style jsx>{`
+        @keyframes slideInRight {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        
+        .animate-slide-in-right {
+          animation: slideInRight 0.3s ease-out;
+        }
+      `}</style>
+    </>
   );
 };
 
